@@ -1,0 +1,10 @@
+{
+  "name": "origin-token-prototype",
+  "description": "PROTOTYPE for Origin Token. PROTOTYPE ONLY. All ideas here may be scrapped with no notice",
+  "version": "0.0.1",
+  "dependencies": {
+    "openzeppelin-solidity": "1.10.0",
+    "ganache-cli": "^6.1.6",
+    "truffle": "^4.1.13"
+  }
+}
