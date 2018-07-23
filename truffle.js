@@ -19,5 +19,12 @@ module.exports = {
       port: 7545,     // Assumes local blockchain
       network_id: '*' // Match any network id
     }
+  },
+  mocha: {
+    reporter: 'eth-gas-reporter',
+    reporterOptions : {
+      currency: 'USD',
+      gasPrice: 7
+    }
   }
 };

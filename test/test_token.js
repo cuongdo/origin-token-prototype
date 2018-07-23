@@ -7,6 +7,7 @@ contract('OriginToken', accounts => {
 
   beforeEach(async () => {
     token = await OriginToken.new()
+    await token.initialize()
     owner = accounts[0]
   })
 

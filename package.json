@@ -2,9 +2,16 @@
   "name": "origin-token-prototype",
   "description": "PROTOTYPE for Origin Token. PROTOTYPE ONLY. All ideas here may be scrapped with no notice",
   "version": "0.0.1",
+  "devDependencies": {
+    "bignumber.js": "^7.2.1",
+    "chai": "*",
+    "chai-bignumber": "^2.0.2",
+    "eth-gas-reporter": "*"
+  },
   "dependencies": {
     "openzeppelin-solidity": "1.10.0",
     "ganache-cli": "^6.1.6",
-    "truffle": "^4.1.13"
+    "truffle": "^4.1.13",
+    "zos-lib": "1.3.0"
   }
 }
