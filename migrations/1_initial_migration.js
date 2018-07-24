@@ -1,7 +1,7 @@
 var Migrations = artifacts.require("./Migrations.sol");
-var OriginTokenContract = artifacts.require("OriginToken");
+var ProxiedTokenContract = artifacts.require("ProxiedToken");
 
 module.exports = function(deployer) {
   deployer.deploy(Migrations);
-  deployer.deploy(OriginTokenContract);
+  deployer.deploy(ProxiedTokenContract);
 };

@@ -8,9 +8,9 @@ import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "zos-lib/contracts/migrations/Initializable.sol";
 import "zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol";
 
-contract OriginToken is Initializable, StandardBurnableToken, MintableToken {
-  string public constant name = "OriginToken"; // solium-disable-line uppercase
-  string public constant symbol = "OGN"; // solium-disable-line uppercase
+contract ProxiedToken is Initializable, StandardBurnableToken, MintableToken {
+  string public constant name = "ProxiedToken"; // solium-disable-line uppercase
+  string public constant symbol = "PRX"; // solium-disable-line uppercase
   uint8 public constant decimals = 18; // solium-disable-line uppercase
 
   uint256 public constant INITIAL_SUPPLY = 1e9 * (10 ** uint256(decimals));
@@ -31,7 +31,7 @@ contract OriginToken is Initializable, StandardBurnableToken, MintableToken {
 }
 
 // throwaway code to exercise adding functionality through a contract upgrade
-contract OriginTokenV2 is OriginToken {
+contract ProxiedTokenV2 is ProxiedToken {
   event Debug(uint256 i);
   using SafeMath for uint256;
 

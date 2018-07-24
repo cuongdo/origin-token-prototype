@@ -3,18 +3,18 @@ var chai = require('chai')
 chai.use(require('chai-bignumber')(BigNumber))
 var expect = chai.expect
 
-const OriginToken = artifacts.require("OriginToken");
-const OriginTokenV2 = artifacts.require("OriginTokenV2");
+const ProxiedToken = artifacts.require("ProxiedToken");
+const ProxiedTokenV2 = artifacts.require("ProxiedTokenV2");
 const AdminUpgradeabilityProxy = artifacts.require('AdminUpgradeabilityProxy');
 
-contract('OriginToken', function([proxyAdmin, tokenOwner, regularUser1, regularUser2]) {
+contract('ProxiedToken', function([proxyAdmin, tokenOwner, regularUser1, regularUser2]) {
   const startSupply = new BigNumber('1000000000000000000000000000')
   const mintAmount = new BigNumber('500000000000000000000000')
   let proxy
   let tokenV1Impl
 
   beforeEach(async () => {
-    tokenV1Impl = await OriginToken.new({from: tokenOwner})
+    tokenV1Impl = await ProxiedToken.new({from: tokenOwner})
     // NOTE: the following line is not usual. we don't usually make any calls
     // to the underlying contract implementation. this is only needed to make
     // an apples-to-apples gas comparison possible below
@@ -23,7 +23,7 @@ contract('OriginToken', function([proxyAdmin, tokenOwner, regularUser1, regularU
 
     // need to call initialize on the proxy, so that the proxy's storage is
     // used
-    let token = await OriginToken.at(proxy.address)
+    let token = await ProxiedToken.at(proxy.address)
     // initialize and all other proxied calls *must* happen with an account
     // that's not proxyAdmin
     await token.initialize({from: tokenOwner})
@@ -31,7 +31,7 @@ contract('OriginToken', function([proxyAdmin, tokenOwner, regularUser1, regularU
 
   it("should retain minted tokens after contract upgrade", async () => {
     // create proxy that points to token v1 contract
-    let token = await OriginToken.at(proxy.address)
+    let token = await ProxiedToken.at(proxy.address)
     let balance = await token.balanceOf(tokenOwner, {from: regularUser1})
     expect(balance).to.be.bignumber.equal(startSupply)
 
@@ -41,7 +41,7 @@ contract('OriginToken', function([proxyAdmin, tokenOwner, regularUser1, regularU
     expect(user1Balance).to.be.bignumber.equal(mintAmount)
 
     // upgrade to V2 of token contract
-    tokenV2Impl = await OriginTokenV2.new()
+    tokenV2Impl = await ProxiedTokenV2.new()
     proxy.upgradeTo(tokenV2Impl.address)
 
     // ensure token balances survived upgrade
@@ -52,7 +52,7 @@ contract('OriginToken', function([proxyAdmin, tokenOwner, regularUser1, regularU
 
     // use token v2 via proxy to inflate token owner's tokens
     const inflatedOwnerBalance = new BigNumber('1030015000000000000000000000')
-    tokenV2 = await OriginTokenV2.at(proxy.address)
+    tokenV2 = await ProxiedTokenV2.at(proxy.address)
     await tokenV2.inflateOwnerTokens({from: tokenOwner})
     ownerBalance = await token.balanceOf(tokenOwner, {from: regularUser1})
     expect(ownerBalance).to.be.bignumber.equal(inflatedOwnerBalance)

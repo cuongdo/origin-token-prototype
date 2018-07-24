@@ -1,19 +1,19 @@
-var OriginToken = artifacts.require("OriginToken");
+var ProxiedToken = artifacts.require("ProxiedToken");
 
-contract('OriginToken', accounts => {
+contract('ProxiedToken', accounts => {
   const startSupply = 1e9 * 1e18 // TODO(cuongdo): make mock that supports passing this in
   var token
   var owner
 
   beforeEach(async () => {
-    token = await OriginToken.new()
+    token = await ProxiedToken.new()
     await token.initialize()
     owner = accounts[0]
   })
 
   it("has the correct name", async function() {
     let name = await token.name()
-    assert.strictEqual(name, "OriginToken")
+    assert.strictEqual(name, "ProxiedToken")
   })
 
   it("should put 1,000,000,000 Origin token in the first account", async function() {
