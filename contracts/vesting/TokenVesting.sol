@@ -40,7 +40,7 @@ contract TokenVesting is Ownable {
   
   constructor(
     address _beneficiary,
-    ERC20 _token,
+    ERC20 _token, // TODO: replace this with an ENS name!
     uint256 _cliff,
     uint256 _cliffAmount,
     uint256[] _vestingTimestamps,
