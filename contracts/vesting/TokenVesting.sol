@@ -69,21 +69,21 @@ contract TokenVesting is Ownable {
     if (newlyVested == 0) {
       return 0;
     }
-    require(token.transfer(beneficiary, newlyVested));
+    require(token.transfer(beneficiary, newlyVested), "transfer failed");
     emit Vested(newlyVested);
+    return newlyVested;
   }
   
   function vested() public view returns (uint256) {
     if (now < cliff) {
       return 0;
     }
-    uint256 v;
-    v += cliffAmount;
+    uint256 v = cliffAmount;
     for (uint i = 0; i < vestingTimestamps.length; i++) {
       if (now < vestingTimestamps[i]) {
         break;
       }
-      v += vestingAmount;
+      v = v.add(vestingAmount);
     }
     return v;
   }
