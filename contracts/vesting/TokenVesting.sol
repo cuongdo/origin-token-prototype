@@ -23,6 +23,8 @@ contract TokenVesting is Ownable {
   uint256 public released;
   // Address to which tokens are transferred during vesting
   address public beneficiary;
+  // Whether this contract has been revoked (tokens refunded to owner)
+  bool public revoked;
   
   // Token contract for this grant.
   ERC20 public token;
@@ -46,6 +48,8 @@ contract TokenVesting is Ownable {
   )
     public
   {
+    // Verify that the timestamps are in ascending order, because we rely on
+    // that elsewhere.
     require(_vestingTimestamps[0] > _cliff);
     for (uint i = 1; i < _vestingTimestamps.length; i++) {
       require(_vestingTimestamps[i - 1] < _vestingTimestamps[i]);
@@ -65,13 +69,13 @@ contract TokenVesting is Ownable {
   }
   
   function vest() public returns (uint256) {
-    uint256 newlyVested = vested().sub(released);
-    if (newlyVested == 0) {
+    uint256 releasable = releasableAmount();
+    if (releasable == 0) {
       return 0;
     }
-    require(token.transfer(beneficiary, newlyVested), "transfer failed");
-    emit Vested(newlyVested);
-    return newlyVested;
+    require(token.transfer(beneficiary, releasable), "transfer failed");
+    emit Vested(releasable);
+    return releasable;
   }
   
   function vested() public view returns (uint256) {
@@ -88,5 +92,18 @@ contract TokenVesting is Ownable {
     return v;
   }
   
-  // TODO: add revoke()
+  function releasableAmount() public view returns (uint256) {
+    return vested().sub(released);
+  }
+  
+  function revoke() public onlyOwner {
+    require(!revoked);
+
+    uint256 balance = token.balanceOf(address(this));
+    uint256 unreleased = releasableAmount();
+    uint256 refund = balance.sub(unreleased);
+    revoked = true;
+    require(token.transfer(owner, refund));
+    emit Revoked();
+  }
 }
