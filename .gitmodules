@@ -1,0 +1,3 @@
+[submodule "contracts/ds-token"]
+	path = contracts/ds-token
+	url = git@github.com:dapphub/ds-token.git

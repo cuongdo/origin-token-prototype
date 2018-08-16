@@ -20,6 +20,7 @@ module.exports = {
       network_id: '*' // Match any network id
     }
   },
+  /*
   mocha: {
     reporter: 'eth-gas-reporter',
     reporterOptions : {
@@ -27,4 +28,5 @@ module.exports = {
       gasPrice: 7
     }
   }
+  */
 };
